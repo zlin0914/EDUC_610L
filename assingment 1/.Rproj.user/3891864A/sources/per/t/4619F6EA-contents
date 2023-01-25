@@ -1,0 +1,110 @@
+---
+title: "Assignment 1"
+author: "Zhen Lin"
+date: "1/17/2023"
+output: 
+ html_document:
+     code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = TRUE,
+                      echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+
+
+```{r}
+# load model
+library(haven)
+library(tidyverse)
+library(modelsummary)
+```
+
+
+### 1. Descriptive Statistics
+**1.1. Summarize the dataset. Specifically, create a table to show the means and standard deviations of the continuous variables (i.e., exclude the geographical identifiers and the level and locale categorical variables). Write 2-3 sentences to report and interpret these statistics. (1 point)**
+
+*The nerds.csv dataset has 1193 observations of 14 variables. Under the descriptive statistic table, I summerize 8 continuous variables. For the purpose of the assignment, I summary ppe and frpl: the observation number of ppe is 1158, the mean is 14701.4, the standard deviation is 4273.5, the minimum is 2011.4, the median is 13587.0, the maximum is 40734.4; the observation number for the frpl is 429, the mean is 0.6, the standard deviation is 0.3, the minimum is 0.0, the median is 0.5, the maximum is 1.0.*
+
+```{r}
+# Saving the data in an eat object
+
+nerds <- read.csv("../Data/nerds.csv") 
+
+#select the continous data and create the summary table
+nerds %>% select(ppe, enroll, sesavgall,lninc50avgall,baplusavgall,unempavgall,snapavgall,frpl) %>%
+  datasummary_skim()
+
+```
+
+
+**1.2 Create a plot (makes sure to label the x and y axis) to visualize the relationship between the variables ppe and frpl. Include a line of best fit on this display. (1 points)**
+
+
+```{r}
+# The plot that visualize the relationship between ppe and frpl and fit with a lm line.
+library(ggplot2)
+ppe_frpl_plot <- ggplot(data=nerds, aes(x= frpl, y= ppe)) +
+              geom_point() +
+              labs(
+              x = "proportion of receiving free-or reduced-price meals ", y = "per-pupil expenditure",
+              title = "Relationship between proportion of receiving free or reduced price meal and per-pupil expenditure") +
+              theme_minimal(base_size = 9) +
+              geom_smooth(method='lm', se=F)
+
+ppe_frpl_plot
+```
+
+**1.3. Describe the bi-variate relationship using direction, linearity, outliers, strength, and magnitude.**
+
+*The bivariate relationship is slightly positive, relatively linear, with some potential outliers. The relationship strength is relatively small The magnitude in the data is relatively shallow.*
+
+
+
+### 2.Research Question: Do schools that educate a larger proportion of students with financial need spend more per student on their education?
+
+**2.1. Write a formal linear model that describes the simple, bivariate relationship between school-level per-pupil expenditure and the school-level average receipt of free- or reduced-price lunch and interpret each of the terms in this model. (1 point)**
+
+$$ppe = \beta_0 + \beta_1 * frpl + \epsilon$$
+
+
+**2.2. State your null hypothesis about the relationship between per-pupil expenditure and the proportion of students receiving free- or reduced-price lunch. (1 point)**
+
+*There is no effect between per-pupil expenditure and the proportion of students receiving free or reduced price lunch.*
+
+**2.3. Formally test your hypothesis using an Ordinary Least Squares estimation strategy. Report your results in a formatted table. (2 points)**
+
+```{r}
+ppe_frpl_model <- lm(ppe~frpl, data = nerds)
+
+summary(ppe_frpl_model)
+modelsummary(ppe_frpl_model, 
+             stars = TRUE,
+             gof_omit = "Adj.|Log.Lik.|F|AIC|BIC|RMSE",
+             coef_rename = c('frpl' = 'the proportion of students receiving free- or reduced-price lunch'))
+
+
+```
+
+
+**2.4  Interpret the results of your test in 1-2 sentences. (2 points)**
+
+We rejected the null hypothesis and conclude that on average, in the population, there is a positive relationship between per-pupil expenditure and the proportion of students receiving free- or reduced-price lunch. One unit change in student receiving free or reduced priced food increase is corresponding to 2634.3 dollars of expenditure increase. One unit change in student receiving free or reduced priced food (frpl) means 100 percent.
+
+**2.5  Assess the quality of your model fit using the R^2 statistic. (1 point)**
+
+The R-squred value is 0.03. This means that our model accounts for 3% of the variance in per-pupil expenditure.
+
+**2.6. Select an alpha-threshold and describe the corresponding confidence interval for your estimates of the relationship between frpl and ppe. (1 point)**
+
+I select 0.05 as the alpha threshold for the relationship. Under the null hypothesis, it is extremaly unlikely to obtain a "the proportion of students receiving free- or reduced-price lunch slop" of 2634.3. The range of confidence interval is 2634.3 ± 1.96 * 407.2 which the numbers 95% fall between [1836.188,3432.412].
+We can reject the null hypothesis and conclude that there is a positive relationship between the proportion of students receiving free- or reduced-price lunch  and per-pupil expenditure in the population.
+
+
+**2.7. Imagine you are an analyst working for Colt Gill, Director of the Oregon Department of Education. You have been tasked with describing to him whether schools with greater levels of student financial need receive more money. Write a short paragraph reporting the results of your analysis, while introducing appropriate caveats and nuances as needed. In particular, you should think about how you want to introduce the ideas of model fit, omitted variables and correlation for a lay audience. (1 point)**
+
+
+We postulated a linear model which we estimated via Ordinary-Least Squares regression to assess whether there is a relationship between greater levels of student financial need and if they are receiving more money, on average, in the population of students. At an alpha threshold of 0.05, we found that the proportion of students receiving free or reduced price lunch was a significant predictor of per-pupil expenditure and accounted for approximately 3% of the variance in per-pupil expenditure. We estimate one unit change in proportion of student receiving free or reduced priced food increase is corresponding to 2634.3 dollars of expenditure increase (p<0.001, 95% CI:1836.188,3432.412) points difference. 

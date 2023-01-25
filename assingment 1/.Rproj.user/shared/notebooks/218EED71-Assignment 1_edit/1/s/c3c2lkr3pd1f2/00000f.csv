@@ -1,0 +1,7 @@
+"0","# Saving the data in an eat object"
+"0",""
+"0","nerds <- read.csv(""https://daviddliebowitz.github.io/EDUC643_23W/data/nerds.csv"") "
+"0",""
+"0","#select the continous data and create the summary table"
+"0","nerds %>% select(ppe, enroll, sesavgall,lninc50avgall,baplusavgall,unempavgall,snapavgall,frpl) %>%"
+"0","  datasummary_skim()"

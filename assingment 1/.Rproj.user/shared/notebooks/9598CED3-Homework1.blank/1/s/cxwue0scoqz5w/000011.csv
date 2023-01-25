@@ -1,0 +1,4 @@
+"0",""
+"0","library(lattice)"
+"0"," "
+"0","bwplot(School~Peersupport, data=P2FHW1)"

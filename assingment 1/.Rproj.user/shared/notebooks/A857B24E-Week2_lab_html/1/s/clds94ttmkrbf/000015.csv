@@ -1,0 +1,5 @@
+"0","# Open the nerds csv file"
+"0",""
+"0","nerds <- read.csv(""nerds.csv"") "
+"2","Error in file(file, ""rt"") : cannot open the connection
+"

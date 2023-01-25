@@ -1,0 +1,17 @@
+"0",""
+"0","library(performance)"
+"0","test_lrt(OLSInt,MLMRanInt,estimator=""REML"")"
+"1","[34m# Likelihood-Ratio-Test (LRT) for Model Comparison (REML-estimator)[39m
+
+Name      |   Model | df | df_diff |     Chi2 |      p
+------------------------------------------------------
+OLSInt    |     glm |  2 |         |          |       
+MLMRanInt | lmerMod |  3 |       1 | 6.82e-13 | > .999
+"
+"0","test_performance(OLSInt,MLMRanInt,estimator=""REML"")"
+"1","Name |   Model |    BF | df | df_diff |     Chi2 |      p
+---------------------------------------------------------
+..1  |     glm |       |  2 |         |          |       
+..2  | lmerMod | 0.053 |  3 |    1.00 | 1.36e-12 | > .999
+Models were detected as nested and are compared in sequential order.
+"

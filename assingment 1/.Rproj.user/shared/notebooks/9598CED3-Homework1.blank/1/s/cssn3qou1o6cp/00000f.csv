@@ -1,0 +1,4 @@
+"0","library(haven)"
+"0","P2FHW1 <- read_sav(""./P2FHW1.sav"")"
+"0","View(P2FHW1)  "
+"0",""

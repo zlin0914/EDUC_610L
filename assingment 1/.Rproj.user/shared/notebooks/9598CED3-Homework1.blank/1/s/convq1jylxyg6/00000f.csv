@@ -1,0 +1,7 @@
+"0"," "
+"0","library(ggplot2)"
+"0","ggplot(P2FHW1, aes(x=reorder(School,Peersupport,na.rm=TRUE), y=Peersupport, group=School)) +"
+"0","geom_boxplot()  +"
+"0","theme_classic() +"
+"0","stat_summary(fun.y=""mean"") +"
+"0","coord_flip()  "
